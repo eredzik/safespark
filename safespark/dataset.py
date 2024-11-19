@@ -124,7 +124,7 @@ class DataFrame(Generic[T], SparkDataFrame):
         how: Literal["inner", "left", "right", "full", "cross"],
     ) -> "DataFrame[Union[T, T2]]":
         res: DataFrame[Union[T, T2]] = DataFrame._fromSpark(
-            super().join(other, using, how)
+            super().join(other, on, how)
         )
         return res
 
