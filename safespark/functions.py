@@ -12,7 +12,7 @@ from typing_extensions import (
 from .dataset import TColumn
 T = TypeVar("T", bound=LiteralString, contravariant=True)
 
-def col[T: LiteralString](colname: T) -> TColumn[T, T]:
+def col(colname: T) -> TColumn[T, T]:
     ret: TColumn[T, T] = TColumn._from_spark_col(F.col(colname))
     return ret
 
