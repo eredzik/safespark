@@ -1,6 +1,6 @@
-from safespark.dataset import Dataset, TColumn
+from safespark.dataset import DataFrame, TColumn
 
 
 
 
-__all__ = ["Dataset", "TColumn"]
+__all__ = ["DataFrame", "TColumn"]

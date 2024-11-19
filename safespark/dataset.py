@@ -11,7 +11,8 @@ from typing_extensions import (
     override,
 )
 
-from pyspark.sql import DataFrame
+from pyspark.sql import DataFrame as SparkDataFrame
+from pyspark.sql.types import DataType
 from pyspark.sql.column import Column
 
 T = TypeVar("T", bound=LiteralString, contravariant=True)
@@ -59,6 +60,10 @@ class TColumn(Generic[In, Out], Column):
                 super().__eq__(other)
             )
             return newcol
+        
+    def cast(self, dataType: DataType | str) -> "TColumn[In, Out]":
+        newcol: TColumn[In, Out] = TColumn._from_spark_col(super().cast(dataType))
+        return newcol
 
 
 
@@ -66,33 +71,33 @@ class TColumn(Generic[In, Out], Column):
 ColumnOrColname: TypeAlias = Union[TColumn[Union[T2, Literal["lit"]], Out], Out]
 
 
-class Dataset(Generic[T], DataFrame):
+class DataFrame(Generic[T], SparkDataFrame):
     @classmethod
-    def _fromSpark(cls, df: DataFrame) -> "Dataset[T]":
+    def _fromSpark(cls, df: SparkDataFrame) -> "DataFrame[T]":
         return cls(jdf=df._jdf, sql_ctx=df.sparkSession)
 
     def withColumn(  # type: ignore
         self, colname: T2, col: TColumn[T, Out]
-    )-> "Dataset[Union[T, T2]]":
+    )-> "DataFrame[Union[T, T2]]":
         # newcols: list[Union[ColumnOrColumnName[T], T2]] = [self.columns_t, colname]
-        res: Dataset[Union[T, T2]] = Dataset._fromSpark(
+        res: DataFrame[Union[T, T2]] = DataFrame._fromSpark(
             super().withColumn(colname, col)
         )
         return res
 
     @override
-    def alias(self, alias: TAlias) -> "Dataset[TAlias+T]":  # type: ignore
+    def alias(self, alias: TAlias) -> "DataFrame[TAlias+T]":  # type: ignore
         
-        return Dataset._fromSpark(self.alias(alias))
+        return DataFrame._fromSpark(self.alias(alias))
         
 
     def join(
             self,
-            other: "Dataset[T2]",
+            other: "DataFrame[T2]",
             on: TColumn[Union[T, T2], Any],
             how: Literal["inner", "left", "right", "full", "cross"],
-            ) -> "Dataset[Union[T, T2]]":
-        res: Dataset[Union[T, T2]] = Dataset._fromSpark(
+            ) -> "DataFrame[Union[T, T2]]":
+        res: DataFrame[Union[T, T2]] = DataFrame._fromSpark(
             super().join(other, using, how)
         )
         return res
@@ -103,15 +108,15 @@ class Dataset(Generic[T], DataFrame):
             TColumn[T, Out],
             TColumn[Literal["lit"], OutLit],
         ],
-    ) -> "Dataset[Union[Out, OutLit]]": 
-        res: Dataset[Union[Out, OutLit]] = self._fromSpark(super().select(colnames))
+    ) -> "DataFrame[Union[Out, OutLit]]": 
+        res: DataFrame[Union[Out, OutLit]] = self._fromSpark(super().select(colnames))
         return res
 
     def filter(self, *conditions: 
             TColumn[Union[T, Literal["lit"]], Out],
             
-        ) -> "Dataset[T]":
-        res: Dataset[T] = self._fromSpark(super().filter(conditions))
+        ) -> "DataFrame[T]":
+        res: DataFrame[T] = self._fromSpark(super().filter(conditions))
         return res
     
 

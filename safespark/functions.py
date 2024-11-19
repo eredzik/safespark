@@ -8,8 +8,9 @@ from typing_extensions import (
     TypeVar,
     
 )
-
+from pyspark.sql.functions import *
 from .dataset import TColumn
+
 T = TypeVar("T", bound=LiteralString, contravariant=True)
 
 def col(colname: T) -> TColumn[T, T]:

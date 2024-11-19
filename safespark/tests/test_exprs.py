@@ -1,9 +1,9 @@
 
 from typing_extensions import Literal
-from safespark.dataset import Dataset
+from safespark.dataset import DataFrame
 from safespark import functions as F 
 from pyspark.sql import DataFrame
-df1: Dataset[Literal["source1", "source2"]] = DataFrame()
+df1: DataFrame[Literal["source1", "source2"]] = DataFrame()
 df2 = df1.withColumn("c", F.col("source1"))
 df3 = df2.select(F.col("source1"))
 df4 = df3.withColumn("cd", F.col("source2"))  #  expect error 
