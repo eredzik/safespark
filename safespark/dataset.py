@@ -32,12 +32,13 @@ DecimalLiteral = decimal.Decimal
 DateTimeLiteral = Union[datetime.datetime, datetime.date]
 LiteralType = PrimitiveType
 
-LooseOther: TypeAlias = (
-    LiteralType | DateTimeLiteral | "TColumn[InOther, OutOther]" | DecimalLiteral
-)
 
 
 class TColumn(Generic[In, Out], Column):
+
+    LooseOther: TypeAlias = (
+        "LiteralType | DateTimeLiteral | TColumn[InOther, OutOther] | DecimalLiteral"
+    )
     @classmethod
     def _from_spark_col(cls, col: Column) -> "TColumn[In, Out]":
         new = cls(col._jc)
