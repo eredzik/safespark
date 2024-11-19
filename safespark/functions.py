@@ -31,3 +31,8 @@ def trim(
 )-> TColumn[T, Literal["expr"]]:
     ret: TColumn[T, Literal["expr"]] = TColumn._from_spark_col(F.trim(col))
     return ret
+
+def year(col: ColumnOrColname[T, Out]
+)-> TColumn[T, Literal["expr"]]:
+    ret: TColumn[T, Literal["expr"]] = TColumn._from_spark_col(F.year(col))
+    return ret
