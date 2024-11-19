@@ -113,9 +113,9 @@ class DataFrame(Generic[T], SparkDataFrame):
         )
         return res
 
-    @override
-    def alias(self, alias: TAlias) -> "DataFrame[TAlias+T]":  # type: ignore
-        return DataFrame._fromSpark(self.alias(alias))
+    def alias(self, alias: TAlias) -> "DataFrame[T]":  # type: ignore
+        newdf:"DataFrame[T]" = DataFrame._fromSpark(self.alias(alias))
+        return newdf
 
     def join(
         self,
