@@ -115,6 +115,6 @@ class Dataset(Generic[T], DataFrame):
         return res
     
 
-    def __getattr__[Tstr](self, name: T) -> TColumn[T, T]:  
+    def __getattr__(self, name: T) -> TColumn[T, T]:  
         rescol : TColumn[T, T] = TColumn._from_spark_col(super().__getattr__(name))
         return rescol
