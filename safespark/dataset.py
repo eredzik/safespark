@@ -1,5 +1,6 @@
 import datetime
 import decimal
+from typing import List, Tuple
 from typing_extensions import (
     Any,
     Generic,
@@ -117,6 +118,7 @@ class DataFrame(Generic[T], SparkDataFrame):
     def select(   # type: ignore
         self,
         *colnames: Union[
+            # T,
             TColumn[T, Out],
             TColumn[Literal["lit"], OutLit],
         ],
@@ -131,6 +133,12 @@ class DataFrame(Generic[T], SparkDataFrame):
         res: DataFrame[T] = self._fromSpark(super().filter(conditions))
         return res
     
+    @property
+    def columns(self)->Tuple[TColumn[T,T], ...]:
+        return self.columns
+
+    def __getitem__(self, key: T) -> TColumn[T, T]:
+        return self.columns[key]
 
     def __getattr__(self, name: T) -> TColumn[T, T]:  
         rescol : TColumn[T, T] = TColumn._from_spark_col(super().__getattr__(name))

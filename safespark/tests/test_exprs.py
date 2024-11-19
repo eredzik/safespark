@@ -19,10 +19,15 @@ df6 = df5.select(
     nonexistentcol, # expect error
     existingconl,
     cdcol,
-    col("source1"),
+    F.col("source1"),
     expr.alias('expraliased'),
     litcol,
     lit2,
+    
+)
+df7a = df6.select(
+    *df6.columns,
+    
 )
 
 df7 = df6.filter(expr)
@@ -34,5 +39,5 @@ df10 = df9.select(F.trim(F.col("cd")).alias("bbda"))
 df6.bcd  #  expect error
 df6.cd
 
-dfjoined = df6.join(df7, on=F.col('cd')==F.col('def'), how="inner")
+dfjoined = df10.join(df8, on=df10['bbda']==df8['cd'], how="inner").select(*df8.columns, df10['bbda'])
 
