@@ -34,6 +34,7 @@ LiteralType = PrimitiveType
 
 
 class TColumn(Generic[In, Out], Column):
+
     LooseOther: TypeAlias = (
         "LiteralType | DateTimeLiteral | TColumn[InOther, OutOther] | DecimalLiteral"
     )
@@ -112,6 +113,7 @@ ColumnOrColname: TypeAlias = Union[TColumn[Union[T2, Literal["lit"]], Out], Out]
 
 
 class DataFrame(Generic[T], SparkDataFrame):
+
     @classmethod
     def _fromSpark(cls, df: SparkDataFrame) -> "DataFrame[T]":
         return cls(jdf=df._jdf, sql_ctx=df.sparkSession)
@@ -132,7 +134,7 @@ class DataFrame(Generic[T], SparkDataFrame):
     def join(
         self,
         other: "DataFrame[T2]",
-        on: TColumn[Union[T, T2], Any],
+        on: Union[TColumn[Union[T, T2], Any], T, T2, List[Union[T, T2]]],
         how: Literal["inner", "left", "right", "full", "cross"],
     ) -> "DataFrame[Union[T, T2]]":
         res: DataFrame[Union[T, T2]] = DataFrame._fromSpark(

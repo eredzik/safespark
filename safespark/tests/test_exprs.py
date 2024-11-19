@@ -39,5 +39,8 @@ df10 = df9.select(F.trim(F.col("cd")).alias("bbda"))
 df6.bcd  #  expect error
 df6.cd
 
-dfjoined = df10.join(df8, on=df10['bbda']==df8['cd'], how="inner").select(*df8.columns, df10['bbda'])
+dfjoined = df10.join(df8, on=df10['bbda']==df8['cd'], how="inner").select(*df8.
+columns, df10['bbda'])
+dfjoined = df10.join(df8, on=['bbda'], how="inner").select(*df8.
+columns, df10['bbda'])
 
