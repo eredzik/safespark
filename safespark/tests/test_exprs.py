@@ -30,6 +30,7 @@ df7 = df6.filter(expr)
 df8 = df7.select(F.col("cd"))
 expr2 = (F.col("cd") == F.lit("def")) & (F.col("cd") == "abc") 
 df9 = df8.filter(expr2)
+df10 = df9.select(F.trim(F.col("cd")).alias("bbda"))
 df6.bcd  #  expect error
 df6.cd
 
