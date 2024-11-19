@@ -49,7 +49,7 @@ class TColumn(Generic[In, Out], Column):
         newcol: TColumn[In, T2] = TColumn._from_spark_col(super().alias(alias))
         return newcol
 
-    def __binary_op(self, other: LooseOther[InOther, OutOther], op: str):
+    def __binary_op(self, other: "LooseOther[InOther, OutOther]", op: str):
         if isinstance(other, TColumn):
             newcol_column: TColumn[Union[InOther, In], Literal["expr"]] = (
                 TColumn._from_spark_col(getattr(super(), op)(other))
@@ -64,44 +64,44 @@ class TColumn(Generic[In, Out], Column):
 
     def __eq__(  # type: ignore[override]
         self,
-        other: LooseOther[InOther, OutOther],
+        other: "LooseOther[InOther, OutOther]",
     ):
         return self.__binary_op(other, "__eq__")
 
-    def __and__(self, other: LooseOther[InOther, OutOther]):
+    def __and__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__and__")
 
-    def __sub__(self, other: LooseOther[InOther, OutOther]):
+    def __sub__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__sub__")
 
-    def __mul__(self, other: LooseOther[InOther, OutOther]):
+    def __mul__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__mul__")
 
-    def __truediv__(self, other: LooseOther[InOther, OutOther]):
+    def __truediv__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__truediv__")
 
-    def __mod__(self, other: LooseOther[InOther, OutOther]):
+    def __mod__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__mod__")
 
-    def __add__(self, other: LooseOther[InOther, OutOther]):
+    def __add__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__add__")
 
-    def __floordiv__(self, other: LooseOther[InOther, OutOther]):
+    def __floordiv__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__floordiv__")
 
-    def __pow__(self, other: LooseOther[InOther, OutOther]):
+    def __pow__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__pow__")
 
-    def __lshift__(self, other: LooseOther[InOther, OutOther]):
+    def __lshift__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__lshift__")
 
-    def __rshift__(self, other: LooseOther[InOther, OutOther]):
+    def __rshift__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__rshift__")
 
-    def __xor__(self, other: LooseOther[InOther, OutOther]):
+    def __xor__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__xor__")
 
-    def __or__(self, other: LooseOther[InOther, OutOther]):
+    def __or__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__or__")
 
     def cast(self, dataType: DataType | str) -> "TColumn[In, Out]":
