@@ -1,5 +1,5 @@
 
-from typing import Literal
+from typing_extensions import Literal
 from safespark.dataset import Dataset
 from safespark import functions as F 
 from pyspark.sql import DataFrame
