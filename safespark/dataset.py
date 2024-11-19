@@ -61,6 +61,18 @@ class TColumn(Generic[In, Out], Column):
             )
             return newcol
         
+    def __and__(self, other: LiteralType | "TColumn[InOther, OutOther]"):
+        if isinstance(other, TColumn):
+            newcol_column: TColumn[Union[InOther, In], Literal["expr"]] = (
+                TColumn._from_spark_col(super().__and__(other))
+            )
+            return newcol_column
+        else:
+            newcol: TColumn[In, Literal["expr"]] = TColumn._from_spark_col(
+                super().__and__(other)
+            )
+            return newcol
+        
     def cast(self, dataType: DataType | str) -> "TColumn[In, Out]":
         newcol: TColumn[In, Out] = TColumn._from_spark_col(super().cast(dataType))
         return newcol

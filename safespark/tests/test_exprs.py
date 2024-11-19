@@ -2,8 +2,8 @@
 from typing_extensions import Literal
 from safespark.dataset import DataFrame
 from safespark import functions as F 
-from pyspark.sql import DataFrame
-df1: DataFrame[Literal["source1", "source2"]] = DataFrame()
+from pyspark.sql import DataFrame as SparkDataFrame
+df1: DataFrame[Literal["source1", "source2"]] = SparkDataFrame()
 df2 = df1.withColumn("c", F.col("source1"))
 df3 = df2.select(F.col("source1"))
 df4 = df3.withColumn("cd", F.col("source2"))  #  expect error 
@@ -26,7 +26,10 @@ df6 = df5.select(
 )
 
 df7 = df6.filter(expr)
+
 df8 = df7.select(F.col("cd"))
+expr2 = (F.col("cd") == F.lit("def")) & (F.col("cd") == "abc") 
+df9 = df8.filter(expr2)
 df6.bcd  #  expect error
 df6.cd
 
