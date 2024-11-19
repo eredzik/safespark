@@ -114,7 +114,7 @@ class DataFrame(Generic[T], SparkDataFrame):
         return res
 
     def alias(self, alias: TAlias) -> "DataFrame[T]":  # type: ignore
-        newdf:"DataFrame[T]" = DataFrame._fromSpark(self.alias(alias))
+        newdf:"DataFrame[T]" = DataFrame._fromSpark(super().alias(alias))
         return newdf
 
     def join(
