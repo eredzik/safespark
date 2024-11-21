@@ -103,6 +103,15 @@ class TColumn(Generic[In, Out], Column):
 
     def __or__(self, other: "LooseOther[InOther, OutOther]"):
         return self.__binary_op(other, "__or__")
+    def __gt__(self, other: "LooseOther[InOther, OutOther]"):
+        return self.__binary_op(other, "__gt__")
+    def __ge__(self, other: "LooseOther[InOther, OutOther]"):
+        return self.__binary_op(other, "__ge__")
+    def __lt__(self, other: "LooseOther[InOther, OutOther]"):
+        return self.__binary_op(other, "__lt__")
+    def __le__(self, other: "LooseOther[InOther, OutOther]"):
+        return self.__binary_op(other, "__le__")
+    
 
     def cast(self, dataType: DataType | str) -> "TColumn[In, Out]":
         newcol: TColumn[In, Out] = TColumn._from_spark_col(super().cast(dataType))
