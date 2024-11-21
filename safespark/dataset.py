@@ -41,7 +41,7 @@ class TColumn(Generic[In, Out], Column):
 
     @classmethod
     def _from_spark_col(cls, col: Column) -> "TColumn[In, Out]":
-        new = cls(col._jc)
+        new: TColumn[In, Out] = col
         return new
 
     @override
