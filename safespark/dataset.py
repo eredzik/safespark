@@ -61,6 +61,8 @@ class TColumn(Generic[In, Out], Column):
             )
 
             return newcol
+        
+    
 
     def __eq__(  # type: ignore[override]
         self,
@@ -133,6 +135,11 @@ class DataFrame(Generic[T], SparkDataFrame):
         # newcols: list[Union[ColumnOrColumnName[T], T2]] = [self.columns_t, colname]
         res: DataFrame[Union[T, T2]] = DataFrame._fromSpark(
             super().withColumn(colname, col)
+        )
+        return res
+    def withColumnRenamed(self, existing: T, new: T2) -> "DataFrame[Union[T, T2]]":# type: ignore
+        res: DataFrame[Union[T, T2]] = DataFrame._fromSpark(
+            super().withColumnRenamed(existing, new) 
         )
         return res
 
